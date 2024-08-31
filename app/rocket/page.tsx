@@ -10,13 +10,40 @@ import {
   Stars,
   useProgress,
 } from '@react-three/drei';
-import { Canvas } from '@react-three/fiber';
-import { Suspense } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Suspense, useEffect, useRef, useState } from 'react';
+import * as THREE from 'three';
+import { useHotkeys } from '@mantine/hooks';
 
 function LoadingIndicator() {
   const { active, progress, errors, item, loaded, total } = useProgress();
-  return <Html center>{progress} % loaded</Html>;
+  // set progress max two precision
+  const progressPercentage = Math.round(progress * 100);
+  if (!active) {
+    return null;
+  }
+  return <Html center>{progressPercentage} % loaded</Html>;
 }
+
+const RocketModel = () => {
+  const modelRef = useRef<THREE.Group>(null);
+  const [isLaunched, setIsLaunched] = useState(false);
+  useHotkeys([['Space', () => setIsLaunched(!isLaunched)]]);
+  const { camera } = useThree();
+  useFrame(() => {
+    if (isLaunched && modelRef.current) {
+      modelRef.current.position.y += 0.02;
+    }
+    camera.lookAt(modelRef?.current?.position || new THREE.Vector3(0, 0, 0));
+  });
+  return (
+    <Suspense fallback={null}>
+      <Gltf ref={modelRef} castShadow receiveShadow src="/rocket-2.glb" />
+      <Preload all />
+      <LoadingIndicator />
+    </Suspense>
+  );
+};
 
 export default function Rocket() {
   return (
@@ -32,7 +59,7 @@ export default function Rocket() {
         />
         <Stage adjustCamera={1} intensity={0.5}>
           <Suspense fallback={null}>
-            <Gltf castShadow receiveShadow src="/rocket-2.glb" />
+            <RocketModel />
             <Preload all />
           </Suspense>
         </Stage>
