@@ -34,21 +34,24 @@ const RocketModel = () => {
     if (isLaunched && modelRef.current) {
       // smoothly move the rocket up
       modelRef.current.position.y += 0.02;
+      if (camera.position.x < 10) {
+        camera.position.x -= 0.025;
+        camera.lookAt(
+          modelRef?.current?.position || new THREE.Vector3(0, 0, 0)
+        );
+      }
     }
-    if (camera.position.x < 10) {
-      camera.position.x -= 0.025;
-    }
-    camera.lookAt(modelRef?.current?.position || new THREE.Vector3(0, 0, 0));
   });
+
+  // prevent wheel event when scroll on HTML
   return (
     <Suspense fallback={null}>
-      <Gltf ref={modelRef} castShadow receiveShadow src="/rocket-2.glb" />
+      <Gltf ref={modelRef} castShadow receiveShadow src="/rocket-2.glb"></Gltf>
       <Preload all />
       <LoadingIndicator />
     </Suspense>
   );
 };
-
 export default function Rocket() {
   useDocumentTitle('Rocket');
   return (
@@ -80,6 +83,53 @@ export default function Rocket() {
           azimuth={0.25}
         />
       </Canvas>
+      <div
+        onWheel={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+        }}
+        className="absolute top-4 left-4 flex flex-col gap-2 text-sm text-black-500 w-[300px] overflow-y-auto bg-transparent backdrop-blur-md border-2 border-white rounded-md p-4"
+      >
+        <h1 className="text-2xl font-bold mb-2">长征二号F运载火箭</h1>
+        <div className="flex flex-row gap-2 items-center justify-between">
+          <label className="font-bold w-[80px]">用途</label>
+          <p className="flex-1">不可重复使用之运载火箭</p>
+        </div>
+        <div className="flex flex-row gap-2 items-center justify-between">
+          <label className="font-bold w-[80px]">制造者</label>
+          <p className="flex-1">中国运载火箭技术研究院（CALT）</p>
+        </div>
+        <div className="flex flex-row gap-2 items-start justify-between">
+          <label className="font-bold w-[80px]">高度</label>
+          <p className="flex-1">
+            Y版本：58.34米（191.4英尺）
+            <br /> T版本：52.03米（170.7英尺）
+          </p>
+        </div>
+        <div className="flex flex-row gap-2 items-start justify-between">
+          <label className="font-bold w-[80px]">直径</label>
+          <p className="flex-1">
+            芯级：3.35米（11.0英尺）
+            <br /> 助推器：2.25米（7.4英尺）
+          </p>
+        </div>
+        <div className="flex flex-row gap-2 items-start justify-between">
+          <label className="font-bold w-[80px]">级数</label>
+          <p className="flex-1">2级+4×助推器</p>
+        </div>
+        <div className="flex flex-row gap-2 items-start justify-between">
+          <label className="font-bold w-[80px]">发射场</label>
+          <p className="flex-1">中国酒泉卫星发射中心921工位</p>
+        </div>
+        <div className="flex flex-row gap-2 items-start justify-between">
+          <label className="font-bold w-[80px]">总发射次数</label>
+          <p className="flex-1">23次</p>
+        </div>
+        <div className="flex flex-row gap-2 items-start justify-between">
+          <label className="font-bold w-[80px]">成功次数</label>
+          <p className="flex-1">23次</p>
+        </div>
+      </div>
     </>
   );
 }
