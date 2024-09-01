@@ -5,11 +5,12 @@ import {
   CardContent,
   CardDescription,
   CardFooter,
-  CardHeader,
   CardTitle,
 } from '@/components/ui/card';
 import Link from 'next/link';
 import Image from 'next/image';
+import ImageWithPlaceholder from '@/components/image/index';
+
 export default function Home() {
   // add page title to the page
   return (
@@ -22,12 +23,15 @@ export default function Home() {
           <Card className="w-96 h-80 flex flex-col hover:scale-105 transition-all duration-300 bg-transparent backdrop-blur-md text-white">
             <CardContent className="flex flex-col items-start gap-2 flex-1 p-0">
               <div className="w-full h-full">
-                <Image
-                  className="object-contain rounded-b-none rounded-xl w-full h-full"
-                  src="https://images.unsplash.com/photo-1517976487492-5750f3195933?q=80&w=3000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                <ImageWithPlaceholder
+                  src="/cz.jpg"
+                  alt="gallery"
+                  skeletonType="shimmer"
+                  objectFit="contain"
                   width={100}
                   height={100}
-                  alt="rocket"
+                  aspectRatio={382 / 255}
+                  imageClassName="!rounded-b-none !rounded-xl object-contain"
                 />
               </div>
             </CardContent>
@@ -43,12 +47,15 @@ export default function Home() {
           <Card className="w-96 h-80 flex flex-col hover:scale-105 transition-all duration-300 bg-transparent backdrop-blur-md text-white">
             <CardContent className="flex flex-col items-start gap-2 flex-1 p-0">
               <div className="w-full h-full">
-                <Image
-                  className="rounded-b-none rounded-xl w-full h-full"
-                  src="https://images.unsplash.com/photo-1517976487492-5750f3195933?q=80&w=3000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                <ImageWithPlaceholder
+                  src="/earth.jpg"
+                  alt="gallery"
+                  skeletonType="shimmer"
+                  objectFit="contain"
                   width={100}
                   height={100}
-                  alt="earth"
+                  aspectRatio={382 / 255}
+                  imageClassName="!rounded-b-none !rounded-xl object-contain"
                 />
               </div>
             </CardContent>
@@ -64,12 +71,15 @@ export default function Home() {
           <Card className="w-96 h-80 flex flex-col hover:scale-105 transition-all duration-300 bg-transparent backdrop-blur-md text-white">
             <CardContent className="flex flex-col items-start gap-2 flex-1 p-0">
               <div className="w-full h-full">
-                <Image
-                  className="object-contain rounded-b-none rounded-xl w-full h-full"
-                  src="https://images.unsplash.com/photo-1517976487492-5750f3195933?q=80&w=3000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                <ImageWithPlaceholder
+                  src="/rocket.jpg"
+                  alt="gallery"
+                  skeletonType="shimmer"
+                  objectFit="contain"
                   width={100}
                   height={100}
-                  alt="gallery"
+                  aspectRatio={382 / 255}
+                  imageClassName="!rounded-b-none !rounded-xl object-contain"
                 />
               </div>
             </CardContent>

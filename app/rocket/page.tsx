@@ -11,12 +11,12 @@ import {
   useProgress,
 } from '@react-three/drei';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { Suspense, useEffect, useRef, useState } from 'react';
+import { Suspense, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { useHotkeys } from '@mantine/hooks';
 
 function LoadingIndicator() {
-  const { active, progress, errors, item, loaded, total } = useProgress();
+  const { active, progress } = useProgress();
   // set progress max two precision
   const progressPercentage = Math.round(progress * 100);
   if (!active) {

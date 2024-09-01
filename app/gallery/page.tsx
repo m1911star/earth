@@ -1,18 +1,8 @@
 'use client';
 
-import {
-  Gltf,
-  OrbitControls,
-  Preload,
-  Sky,
-  Stage,
-  Stars,
-  useFBX,
-} from '@react-three/drei';
-import { Canvas, useLoader } from '@react-three/fiber';
+import { OrbitControls, Sky, Stage, useFBX } from '@react-three/drei';
+import { Canvas } from '@react-three/fiber';
 import { Suspense } from 'react';
-// @ts-ignore
-import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 
 const Rockets: React.FC = () => {
   const all = useFBX('/all.fbx');
