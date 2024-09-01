@@ -1,16 +1,26 @@
 'use client';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Stage, Cloud, Preload } from '@react-three/drei';
+import {
+  OrbitControls,
+  Stage,
+  Cloud,
+  Preload,
+  useGLTF,
+  Environment,
+  useFBX,
+} from '@react-three/drei';
 import { Earth } from './earth';
 import { Atmosphere } from '@/components/atmosphere';
+
 export const EarthStage = () => {
+  // add
   const earthTextureUrl = '/earth.jpg';
   const displacementMapUrl = '/gray.png';
   return (
     <>
       <Canvas>
         <Stage adjustCamera={1}>
-          <OrbitControls zoomSpeed={0.1} autoRotate maxZoom={3} />
+          <OrbitControls zoomSpeed={0.1} />
           <Earth
             earthTextureUrl={earthTextureUrl}
             displacementMapUrl={displacementMapUrl}
@@ -18,8 +28,27 @@ export const EarthStage = () => {
           <Atmosphere />
           <Preload all />
         </Stage>
+        <Environment
+          background={true} // can be true, false or "only" (which only sets the background) (default: false)
+          backgroundBlurriness={0} // optional blur factor between 0 and 1 (default: 0, only works with three 0.146 and up)
+          backgroundIntensity={1} // optional intensity factor (default: 1, only works with three 0.163 and up)
+          backgroundRotation={[0, Math.PI / 2, 0]} // optional rotation (default: 0, only works with three 0.163 and up)
+          environmentIntensity={1} // optional intensity factor (default: 1, only works with three 0.163 and up)
+          environmentRotation={[0, Math.PI / 2, 0]} // optional rotation (default: 0, only works with three 0.163 and up)
+          files={['universe.jpg']}
+          path="/"
+          scene={undefined} // adds the ability to pass a custom THREE.Scene, can also be a ref
+          encoding={undefined} // adds the ability to pass a custom THREE.TextureEncoding (default: THREE.sRGBEncoding for an array of files and THREE.LinearEncoding for a single texture)
+        />
       </Canvas>
-      <div className="absolute top-4 left-4 bg-black-500 w-[300px] h-max backdrop-blur-md border-2 border-gray-100 rounded-md p-4">
+      <div
+        style={{
+          textShadow: '0px 0px 10px #00c2cb, -2px -1px 20px #fff',
+          boxShadow: '0px 0px 10px #00c2cb, -2px -1px 20px #fff',
+          color: '#00c2cb',
+        }}
+        className="absolute top-4 left-4 bg-black-500 w-[300px] h-max backdrop-blur-md border-2 border-gray-100 rounded-md p-4"
+      >
         <h1 className="text-2xl font-bold mb-2">地球</h1>
         <div className="flex flex-row gap-2 items-start justify-between">
           <label className="font-bold w-[80px]">远日点</label>
