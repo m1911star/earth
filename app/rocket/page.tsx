@@ -61,9 +61,9 @@ export default function Rocket() {
           radius={100}
           depth={50}
           count={5000}
-          factor={4}
+          factor={5}
           saturation={0}
-          speed={1}
+          speed={3}
         />
         <Stage adjustCamera={1} intensity={0.5}>
           <Suspense fallback={null}>
@@ -74,7 +74,7 @@ export default function Rocket() {
         <OrbitControls
           // makeDefault
           minPolarAngle={0}
-          maxPolarAngle={Math.PI / 2}
+          maxPolarAngle={Math.PI}
         />
         <Sky
           distance={450000}
@@ -88,7 +88,7 @@ export default function Rocket() {
           e.stopPropagation();
           e.preventDefault();
         }}
-        className="absolute top-4 left-4 flex flex-col gap-2 text-sm text-black-500 w-[300px] overflow-y-auto bg-transparent backdrop-blur-md border-2 border-white rounded-md p-4"
+        className="opacity-80 absolute top-4 left-4 flex flex-col gap-2 text-sm text-black-500 w-[300px] overflow-y-auto bg-transparent backdrop-blur-md border-2 border-white border-opacity-50 rounded-md p-4"
       >
         <h1 className="text-2xl font-bold mb-2">长征二号F运载火箭</h1>
         <div className="flex flex-row gap-2 items-center justify-between">
