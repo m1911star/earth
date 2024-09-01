@@ -1,5 +1,6 @@
 'use client';
 
+import { useDocumentTitle } from '@mantine/hooks';
 import { OrbitControls, Sky, Stage, useFBX } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Suspense } from 'react';
@@ -10,6 +11,7 @@ const Rockets: React.FC = () => {
 };
 
 export default function Gallery() {
+  useDocumentTitle('Gallery');
   return (
     <>
       <Canvas>

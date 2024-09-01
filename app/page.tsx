@@ -10,8 +10,10 @@ import {
 import Link from 'next/link';
 import Image from 'next/image';
 import ImageWithPlaceholder from '@/components/image/index';
+import { useDocumentTitle } from '@mantine/hooks';
 
 export default function Home() {
+  useDocumentTitle('Home');
   // add page title to the page
   return (
     <div className="flex flex-col items-center justify-center h-screen w-screen entry">

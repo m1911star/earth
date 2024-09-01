@@ -13,7 +13,7 @@ import {
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Suspense, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { useHotkeys } from '@mantine/hooks';
+import { useDocumentTitle, useHotkeys } from '@mantine/hooks';
 
 function LoadingIndicator() {
   const { active, progress } = useProgress();
@@ -50,6 +50,7 @@ const RocketModel = () => {
 };
 
 export default function Rocket() {
+  useDocumentTitle('Rocket');
   return (
     <>
       <Canvas>
