@@ -32,7 +32,11 @@ const RocketModel = () => {
   const { camera } = useThree();
   useFrame(() => {
     if (isLaunched && modelRef.current) {
+      // smoothly move the rocket up
       modelRef.current.position.y += 0.02;
+    }
+    if (camera.position.x < 10) {
+      camera.position.x -= 0.025;
     }
     camera.lookAt(modelRef?.current?.position || new THREE.Vector3(0, 0, 0));
   });
