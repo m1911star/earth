@@ -27,7 +27,6 @@ export default function RootLayout({
         sizes="16x16"
         href="/favicon-16x16.png"
       />
-      <link rel="manifest" href="/site.webmanifest" />
       <body className={`h-screen w-screen`}>{children}</body>
     </html>
   );

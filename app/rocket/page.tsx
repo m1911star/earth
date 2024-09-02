@@ -3,6 +3,8 @@
 import {
   Gltf,
   Html,
+  Text,
+  MeshTransmissionMaterial,
   OrbitControls,
   Preload,
   Sky,
@@ -70,6 +72,20 @@ export default function Rocket() {
             <RocketModel />
             <Preload all />
           </Suspense>
+          <Text
+            position={[1, 2, 0]} // 调整位置
+            fontSize={0.5}
+            color="white"
+          >
+            火箭
+            <MeshTransmissionMaterial
+              thickness={0.3}
+              roughness={0.5}
+              transmission={1}
+              ior={1.5}
+              chromaticAberration={0.1}
+            />
+          </Text>
         </Stage>
         <OrbitControls
           // makeDefault
@@ -97,20 +113,20 @@ export default function Rocket() {
         </div>
         <div className="flex flex-row gap-2 items-center justify-between">
           <label className="font-bold w-[80px]">制造者</label>
-          <p className="flex-1">中国运载火箭技术研究院（CALT）</p>
+          <p className="flex-1">中国运载火箭技术研究院(CALT)</p>
         </div>
         <div className="flex flex-row gap-2 items-start justify-between">
           <label className="font-bold w-[80px]">高度</label>
           <p className="flex-1">
-            Y版本：58.34米（191.4英尺）
-            <br /> T版本：52.03米（170.7英尺）
+            Y版本: 58.34米(191.4英尺)
+            <br /> T版本: 52.03米(170.7英尺)
           </p>
         </div>
         <div className="flex flex-row gap-2 items-start justify-between">
           <label className="font-bold w-[80px]">直径</label>
           <p className="flex-1">
-            芯级：3.35米（11.0英尺）
-            <br /> 助推器：2.25米（7.4英尺）
+            芯级: 3.35米(11.0英尺)
+            <br /> 助推器: 2.25米(7.4英尺)
           </p>
         </div>
         <div className="flex flex-row gap-2 items-start justify-between">
