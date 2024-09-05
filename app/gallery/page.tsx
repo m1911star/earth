@@ -11,7 +11,7 @@ import {
 import { Canvas } from '@react-three/fiber';
 import { Suspense } from 'react';
 
-const Rockets: React.FC = () => {
+export const Rockets: React.FC = () => {
   const all = useFBX('/all.fbx');
   return <primitive object={all} dispose={null} scale={0.02} />;
 };
