@@ -1,20 +1,10 @@
 'use client';
 
+import { Rockets } from '@/components/rockets';
 import { useDocumentTitle } from '@mantine/hooks';
-import {
-  Environment,
-  OrbitControls,
-  Sky,
-  Stage,
-  useFBX,
-} from '@react-three/drei';
+import { Environment, OrbitControls, Stage } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Suspense } from 'react';
-
-export const Rockets: React.FC = () => {
-  const all = useFBX('/all.fbx');
-  return <primitive object={all} dispose={null} scale={0.02} />;
-};
 
 export default function Gallery() {
   useDocumentTitle('Gallery');

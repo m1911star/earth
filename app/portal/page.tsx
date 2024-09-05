@@ -14,7 +14,7 @@ import { Canvas, useThree } from '@react-three/fiber';
 import { Suspense, useEffect } from 'react';
 import { useRoute } from 'wouter';
 import * as THREE from 'three';
-import { Rockets } from '../gallery/page';
+import { Rockets } from '@/components/rockets';
 
 function LoadingIndicator() {
   const { active, progress } = useProgress();
