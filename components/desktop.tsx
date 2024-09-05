@@ -1,19 +1,10 @@
 import * as THREE from 'three';
 import React, { Suspense, useRef } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import {
-  Html,
-  Environment,
-  useGLTF,
-  ContactShadows,
-  Stage,
-  CameraControls,
-  Gltf,
-} from '@react-three/drei';
-import { EarthComponent, EarthStage } from './stage';
+import { useFrame } from '@react-three/fiber';
+import { Html, Environment, useGLTF, ContactShadows } from '@react-three/drei';
 
 function Model() {
-  const group = useRef<THREE.Group>();
+  const group = useRef<THREE.Group | null>(null);
   // Load model
   const { nodes, materials } = useGLTF('/mac-draco.glb');
   // Make it float
