@@ -13,13 +13,12 @@ import {
   useProgress,
 } from '@react-three/drei';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { Suspense, useRef, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { useDocumentTitle, useHotkeys } from '@mantine/hooks';
 
 function LoadingIndicator() {
   const { active, progress } = useProgress();
-  // set progress max two precision
   const progressPercentage = Math.round(progress * 100);
   if (!active) {
     return null;
@@ -33,27 +32,32 @@ const RocketModel = () => {
   useHotkeys([['Space', () => setIsLaunched(!isLaunched)]]);
   const { camera } = useThree();
   useFrame(() => {
+    console.log(modelRef.current?.position, camera.position);
     if (isLaunched && modelRef.current) {
-      // smoothly move the rocket up
       modelRef.current.position.y += 0.02;
-      if (camera.position.x < 10) {
-        camera.position.x -= 0.025;
-        camera.lookAt(
-          modelRef?.current?.position || new THREE.Vector3(0, 0, 0)
-        );
+      if (camera.position.x < 1) {
+        camera.position.x += 0.025;
       }
+      camera.lookAt(modelRef?.current?.position || new THREE.Vector3(0, 0, 0));
     }
   });
 
-  // prevent wheel event when scroll on HTML
+  useEffect(() => {
+    if (!isLaunched) {
+      modelRef.current?.position.set(0, 0, 0);
+      camera.lookAt(modelRef.current?.position || new THREE.Vector3(0, 0, 0));
+    }
+  }, [isLaunched]);
+
   return (
     <Suspense fallback={null}>
-      <Gltf ref={modelRef} castShadow receiveShadow src="/rocket-2.glb"></Gltf>
+      <Gltf ref={modelRef} castShadow receiveShadow src="/rocket-2.glb" />
       <Preload all />
       <LoadingIndicator />
     </Suspense>
   );
 };
+
 export default function Rocket() {
   useDocumentTitle('Rocket');
   return (
@@ -67,12 +71,11 @@ export default function Rocket() {
           saturation={0}
           speed={3}
         />
-        <Stage adjustCamera={1} intensity={0.5}>
+        <Stage adjustCamera={true}>
           <Suspense fallback={null}>
             <RocketModel />
-            <Preload all />
           </Suspense>
-          <Text
+          {/* <Text
             position={[1, 2, 0]} // 调整位置
             fontSize={0.5}
             color="white"
@@ -85,13 +88,9 @@ export default function Rocket() {
               ior={1.5}
               chromaticAberration={0.1}
             />
-          </Text>
+          </Text> */}
         </Stage>
-        <OrbitControls
-          // makeDefault
-          minPolarAngle={0}
-          maxPolarAngle={Math.PI}
-        />
+        <OrbitControls makeDefault />
         <Sky
           distance={450000}
           sunPosition={[0, 1, 0]}
