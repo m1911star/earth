@@ -1,17 +1,18 @@
 import { CameraControls } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
-import { useEffect } from 'react';
-import { useRoute } from 'wouter';
+import { useContext, useEffect } from 'react';
 import * as THREE from 'three';
+import { ModelSceneContext } from '@/hooks/context';
 
 export const Rig = ({
   position = new THREE.Vector3(0, 0, 2),
   focus = new THREE.Vector3(0, 0, 0),
 }) => {
   const { controls, scene } = useThree();
-  const [, params] = useRoute('/portal/:id');
+  const { model } = useContext(ModelSceneContext);
+  console.log(model, 'model in rig');
   useEffect(() => {
-    const active = scene.getObjectByName(params?.id!);
+    const active = scene.getObjectByName(model);
     if (active) {
       active.parent?.localToWorld(position.set(0, 0.5, 0.25));
       active.parent?.localToWorld(focus.set(0, 0, -2));
