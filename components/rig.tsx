@@ -10,9 +10,8 @@ export const Rig = ({
 }) => {
   const { controls, scene } = useThree();
   const { model } = useContext(ModelSceneContext);
-  console.log(model, 'model in rig');
   useEffect(() => {
-    const active = scene.getObjectByName(model);
+    const active = scene.getObjectByName(model ?? '');
     if (active) {
       active.parent?.localToWorld(position.set(0, 0.5, 0.25));
       active.parent?.localToWorld(focus.set(0, 0, -2));
