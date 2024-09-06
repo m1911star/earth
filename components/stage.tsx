@@ -1,83 +1,241 @@
 'use client';
-import { Canvas } from '@react-three/fiber';
-import {
-  OrbitControls,
-  Stage,
-  Cloud,
-  Preload,
-  useGLTF,
-  Environment,
-  useFBX,
-} from '@react-three/drei';
-import { Earth } from './earth';
-import { Atmosphere } from '@/components/atmosphere';
+import { Canvas, useFrame, useLoader, useThree } from '@react-three/fiber';
+import { OrbitControls, Stage, Preload } from '@react-three/drei';
+import * as THREE from 'three';
 
-export const EarthComponent = () => {
+import { useEffect, useRef } from 'react';
+import React from 'react';
+
+const maxSpeed = 20;
+
+// 行星数据
+const planetData = [
+  {
+    name: 'Mercury',
+    size: 3.2,
+    texture: '/solar/mercury.jpg',
+    position: 28,
+    rotationSpeed: 0.004,
+    orbitSpeed: 0.004,
+  },
+  {
+    name: 'Venus',
+    size: 5.8,
+    texture: '/solar/venus.jpg',
+    position: 44,
+    rotationSpeed: 0.002,
+    orbitSpeed: 0.015,
+  },
+  {
+    name: 'Earth',
+    size: 6,
+    texture: '/solar/earth.jpg',
+    position: 62,
+    rotationSpeed: 0.02,
+    orbitSpeed: 0.01,
+  },
+  {
+    name: 'Mars',
+    size: 4,
+    texture: '/solar/mars.jpg',
+    position: 78,
+    rotationSpeed: 0.018,
+    orbitSpeed: 0.008,
+  },
+  {
+    name: 'Jupiter',
+    size: 12,
+    texture: '/solar/jupiter.jpg',
+    position: 100,
+    rotationSpeed: 0.04,
+    orbitSpeed: 0.002,
+  },
+  {
+    name: 'Saturn',
+    size: 10,
+    texture: '/solar/saturn.jpg',
+    position: 138,
+    rotationSpeed: 0.038,
+    orbitSpeed: 0.0009,
+    ring: {
+      innerRadius: 10,
+      outerRadius: 20,
+      texture: '/solar/saturn_ring.png',
+    },
+  },
+  {
+    name: 'Uranus',
+    size: 7,
+    texture: '/solar/uranus.jpg',
+    position: 176,
+    rotationSpeed: 0.03,
+    orbitSpeed: 0.0004,
+    ring: {
+      innerRadius: 7,
+      outerRadius: 12,
+      texture: '/solar/uranus_ring.png',
+    },
+  },
+  {
+    name: 'Neptune',
+    size: 7,
+    texture: '/solar/neptune.jpg',
+    position: 200,
+    rotationSpeed: 0.032,
+    orbitSpeed: 0.0001,
+  },
+  {
+    name: 'Pluto',
+    size: 2.8,
+    texture: '/solar/pluto.jpg',
+    position: 216,
+    rotationSpeed: 0.008,
+    orbitSpeed: 0.0007,
+  },
+];
+
+function Sun() {
+  const sunRef = useRef<THREE.Mesh | null>(null);
+  const texture = useLoader(THREE.TextureLoader, '/solar/sun.jpg');
+
+  useFrame((state, delta) => {
+    if (sunRef.current) {
+      sunRef.current.rotation.y += 0.004;
+    }
+  });
+
+  return (
+    <mesh ref={sunRef}>
+      <sphereGeometry args={[15, 50, 50]} />
+      <meshBasicMaterial map={texture} />
+      <pointLight intensity={4} distance={300} />
+    </mesh>
+  );
+}
+
+function Planet({
+  size,
+  texture,
+  position,
+  rotationSpeed,
+  orbitSpeed,
+  ring,
+}: {
+  size: number;
+  texture: string;
+  position: number;
+  rotationSpeed: number;
+  orbitSpeed: number;
+  ring: { innerRadius: number; outerRadius: number; texture: string } | null;
+}) {
+  const planetRef = useRef<THREE.Mesh | null>(null);
+  const orbitRef = useRef<THREE.Group | null>(null);
+  const planetTexture = useLoader(THREE.TextureLoader, texture);
+
+  useFrame((state, delta) => {
+    if (planetRef.current && orbitRef.current) {
+      planetRef.current.rotation.y += rotationSpeed;
+      orbitRef.current.rotation.y += orbitSpeed;
+    }
+  });
+
+  return (
+    <group ref={orbitRef}>
+      <mesh ref={planetRef} position={[position, 0, 0]}>
+        <sphereGeometry args={[size, 50, 50]} />
+        <meshStandardMaterial map={planetTexture} />
+      </mesh>
+      {ring && (
+        <mesh position={[position, 0, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+          <ringGeometry args={[ring.innerRadius, ring.outerRadius, 32]} />
+          <meshBasicMaterial
+            map={useLoader(THREE.TextureLoader, ring.texture)}
+            side={THREE.DoubleSide}
+          />
+        </mesh>
+      )}
+    </group>
+  );
+}
+
+function PlanetOrbit({ radius }: { radius: number }) {
+  const lineLoopPoints = [];
+
+  // Calculate points for the circular path
+  const numSegments = 100; // Number of segments to create the circular path
+  for (let i = 0; i <= numSegments; i++) {
+    const angle = (i / numSegments) * Math.PI * 2;
+    const x = radius * Math.cos(angle);
+    const z = radius * Math.sin(angle);
+    lineLoopPoints.push(new THREE.Vector3(x, 0, z));
+  }
+  const geometry = new THREE.BufferGeometry();
+  geometry.setFromPoints(lineLoopPoints);
+  return (
+    <lineLoop geometry={geometry}>
+      <lineBasicMaterial color={0xfffaff} />
+    </lineLoop>
+  );
+}
+export function PlanetarySystem() {
   return (
     <>
-      <Stage adjustCamera={1}>
-        <OrbitControls zoomSpeed={0.1} />
-        <Earth />
-        <Atmosphere />
+      <Sun />
+      {planetData.map((planet, index) => (
+        <React.Fragment key={planet.name}>
+          <Planet
+            size={planet.size}
+            texture={planet.texture}
+            position={planet.position}
+            rotationSpeed={planet.rotationSpeed}
+            orbitSpeed={planet.orbitSpeed}
+            ring={planet.ring!}
+          />
+          <PlanetOrbit radius={planet.position} />
+        </React.Fragment>
+      ))}
+    </>
+  );
+}
+
+const Bg = () => {
+  const { scene } = useThree();
+
+  useEffect(() => {
+    const loader = new THREE.CubeTextureLoader();
+    const texture = loader.load([
+      '/solar/stars.jpg',
+      '/solar/stars.jpg',
+      '/solar/stars.jpg',
+      '/solar/stars.jpg',
+      '/solar/stars.jpg',
+      '/solar/stars.jpg',
+    ]);
+    scene.background = texture;
+  }, [scene]);
+  return null;
+};
+
+export const SolarComponent = () => {
+  return (
+    <>
+      <Stage adjustCamera={1} environment={null}>
+        <OrbitControls zoomSpeed={0.2} />
         <Preload all />
+        <ambientLight intensity={0.5} />
+        <PlanetarySystem />
       </Stage>
-      <Environment
-        background={true} // can be true, false or "only" (which only sets the background) (default: false)
-        backgroundBlurriness={0} // optional blur factor between 0 and 1 (default: 0, only works with three 0.146 and up)
-        backgroundIntensity={1} // optional intensity factor (default: 1, only works with three 0.163 and up)
-        backgroundRotation={[0, Math.PI / 2, 0]} // optional rotation (default: 0, only works with three 0.163 and up)
-        environmentIntensity={1} // optional intensity factor (default: 1, only works with three 0.163 and up)
-        environmentRotation={[0, Math.PI / 2, 0]} // optional rotation (default: 0, only works with three 0.163 and up)
-        files={['universe.jpg']}
-        path="/"
-        scene={undefined} // adds the ability to pass a custom THREE.Scene, can also be a ref
-        encoding={undefined} // adds the ability to pass a custom THREE.TextureEncoding (default: THREE.sRGBEncoding for an array of files and THREE.LinearEncoding for a single texture)
-      />
+      <Bg />
     </>
   );
 };
 
-export const EarthStage = () => {
-  // add
-  const earthTextureUrl = '/earth.jpg';
-  const displacementMapUrl = '/gray.png';
+export const SolarStage = () => {
   return (
     <>
       <Canvas>
-        <EarthComponent />
+        <SolarComponent />
       </Canvas>
-      <div
-        style={{
-          textShadow: '0px 0px 10px #00c2cb, -2px -1px 20px #fff',
-          boxShadow: '0px 0px 10px #00c2cb, -2px -1px 20px #fff',
-          color: '#00c2cb',
-        }}
-        className="absolute top-4 left-4 bg-black-500 w-[300px] h-max backdrop-blur-md border-2 border-gray-100 rounded-md p-4"
-      >
-        <h1 className="text-2xl font-bold mb-2">地球</h1>
-        <div className="flex flex-row gap-2 items-start justify-between">
-          <label className="font-bold w-[80px]">远日点</label>
-          <p className="flex-1">152,100,000 km（94,500,000 mi）</p>
-        </div>
-        <div className="flex flex-row gap-2 items-start justify-between">
-          <label className="font-bold w-[80px]">近日点</label>
-          <p className="flex-1">147,095,000 km（91,401,000 mi）</p>
-        </div>
-        <div className="flex flex-row gap-2 items-start justify-between">
-          <label className="font-bold w-[80px]">半长轴</label>
-          <p className="flex-1">149,598,023 km（92,955,902 mi）</p>
-        </div>
-        <div className="flex flex-row gap-2 items-start justify-between">
-          <label className="font-bold w-[80px]">离心率</label>
-          <p className="flex-1">0.0167086</p>
-        </div>
-        <div className="flex flex-row gap-2 items-start justify-between">
-          <label className="font-bold w-[80px]">周长</label>
-          <p className="flex-1">
-            40,075.017 km（24,901.461 mi）赤道 [8] 40,007.86 km（24,859.73 mi）
-          </p>
-        </div>
-      </div>
     </>
   );
 };

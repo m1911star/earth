@@ -4,6 +4,7 @@ export enum ModelScene {
   EARTH = 'earth',
   GALLERY = 'gallery',
   ROCKET = 'rocket',
+  SOLAR = 'solar',
 }
 
 export const ModelSceneContext = createContext<{

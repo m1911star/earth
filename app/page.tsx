@@ -8,7 +8,6 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import Link from 'next/link';
-import Image from 'next/image';
 import ImageWithPlaceholder from '@/components/image/index';
 import { useDocumentTitle } from '@mantine/hooks';
 
@@ -45,12 +44,12 @@ export default function Home() {
             </CardFooter>
           </Card>
         </Link>
-        <Link href="/earth">
+        <Link href="/solar">
           <Card className="w-96 h-80 flex flex-col hover:scale-105 transition-all duration-300 bg-transparent backdrop-blur-md text-white">
             <CardContent className="flex flex-col items-start gap-2 flex-1 p-0">
               <div className="w-full h-full">
                 <ImageWithPlaceholder
-                  src="/earth.jpg"
+                  src="/universe.jpg"
                   alt="gallery"
                   skeletonType="shimmer"
                   objectFit="contain"
@@ -62,9 +61,9 @@ export default function Home() {
               </div>
             </CardContent>
             <CardFooter className="flex flex-col items-start gap-2 py-3">
-              <CardTitle>Earth</CardTitle>
+              <CardTitle>Solar</CardTitle>
               <CardDescription className="text-white">
-                View the earth
+                View the solar system
               </CardDescription>
             </CardFooter>
           </Card>
