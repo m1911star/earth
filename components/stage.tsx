@@ -6,8 +6,6 @@ import * as THREE from 'three';
 import { useEffect, useRef } from 'react';
 import React from 'react';
 
-const maxSpeed = 20;
-
 // 行星数据
 const planetData = [
   {

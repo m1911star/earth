@@ -1,24 +1,27 @@
-// @ts-nocheck
 import * as THREE from 'three';
-import { useEffect, useRef, useState, useContext } from 'react';
-import { Canvas, extend, useFrame, useThree } from '@react-three/fiber';
-import {
-  useCursor,
-  MeshPortalMaterial,
-  CameraControls,
-  Gltf,
-  Text,
-  Preload,
-} from '@react-three/drei';
+import { useRef, useState, useContext } from 'react';
+import { extend, useFrame } from '@react-three/fiber';
+import { useCursor, MeshPortalMaterial, Text } from '@react-three/drei';
 import { easing, geometry } from 'maath';
 import { suspend } from 'suspend-react';
-import { ModelSceneContext } from '@/hooks/context';
+import { ModelScene, ModelSceneContext } from '@/hooks/context';
 extend(geometry);
 // @ts-ignore
 const regular = import('@pmndrs/assets/fonts/inter_regular.woff');
 // @ts-ignore
 const medium = import('@pmndrs/assets/fonts/inter_medium.woff');
 
+interface FrameProps {
+  id: ModelScene;
+  name: string;
+  author: string;
+  bg: string;
+  width?: number;
+  height?: number;
+  children: React.ReactNode;
+  position?: [number, number, number];
+  rotation?: [number, number, number];
+}
 export function Frame({
   id,
   name,
@@ -28,10 +31,9 @@ export function Frame({
   height = 1.61803398875,
   children,
   ...props
-}) {
-  const portal = useRef();
+}: FrameProps) {
+  const portal = useRef(null);
   const { setModel, model } = useContext(ModelSceneContext);
-  console.log(model, 'model');
   const [hovered, hover] = useState(false);
   useCursor(hovered);
   useFrame((state, dt) =>
@@ -60,6 +62,7 @@ export function Frame({
         onPointerOver={(e) => hover(true)}
         onPointerOut={() => hover(false)}
       >
+        {/* @ts-ignore */}
         <roundedPlaneGeometry args={[width, height, 0.1]} />
         <MeshPortalMaterial
           ref={portal}

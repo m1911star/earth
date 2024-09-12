@@ -63,7 +63,6 @@ const ImageWithPlaceholder = memo(function ImageWithPlaceholderImpl({
       backgroundColor = color || '#fff';
       break;
   }
-  console.log('err', error);
 
   return (
     <div className={clsx('w-full', className)}>

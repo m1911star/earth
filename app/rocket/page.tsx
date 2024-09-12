@@ -3,8 +3,6 @@
 import {
   Gltf,
   Html,
-  Text,
-  MeshTransmissionMaterial,
   OrbitControls,
   Preload,
   Sky,
@@ -30,9 +28,9 @@ const RocketModel = () => {
   const modelRef = useRef<THREE.Group>(null);
   const [isLaunched, setIsLaunched] = useState(false);
   useHotkeys([['Space', () => setIsLaunched(!isLaunched)]]);
+  useDocumentTitle('Rocket');
   const { camera } = useThree();
   useFrame(() => {
-    console.log(modelRef.current?.position, camera.position);
     if (isLaunched && modelRef.current) {
       modelRef.current.position.y += 0.02;
       if (camera.position.x < 1) {

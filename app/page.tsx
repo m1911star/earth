@@ -10,6 +10,7 @@ import {
 import Link from 'next/link';
 import ImageWithPlaceholder from '@/components/image/index';
 import { useDocumentTitle } from '@mantine/hooks';
+import { Github } from 'lucide-react';
 
 export default function Home() {
   useDocumentTitle('Home');
